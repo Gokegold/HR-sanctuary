@@ -18,7 +18,7 @@ export default function ProtectedRoute({
 
   // Not authenticated - show login
   if (!isAuthenticated) {
-    return <BiometricLogin onSuccess={() => window.location.reload()} />;
+    return <MultiStageLogin onSuccess={() => window.location.reload()} />;
   }
 
   // Authenticated but no role restrictions

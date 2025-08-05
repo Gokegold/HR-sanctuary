@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
 import { Navigate } from "react-router-dom";
 import { useAuth, User } from "@/contexts/AuthContext";
-import BiometricLogin from "./BiometricLogin";
+import MultiStageLogin from "./MultiStageLogin";
 
 interface ProtectedRouteProps {
   children: ReactNode;

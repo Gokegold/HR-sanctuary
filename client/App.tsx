@@ -184,14 +184,10 @@ const App = () => (
   </QueryClientProvider>
 );
 
-// Ensure root is only created once
+// Safe root mounting to prevent double root creation
 const container = document.getElementById("root");
-if (container) {
-  // Check if root already exists
-  if (!(container as any)._reactRootContainer) {
-    const root = createRoot(container);
-    root.render(<App />);
-    // Mark container as having a root
-    (container as any)._reactRootContainer = true;
-  }
+if (container && !container.hasAttribute('data-root-initialized')) {
+  container.setAttribute('data-root-initialized', 'true');
+  const root = createRoot(container);
+  root.render(<App />);
 }

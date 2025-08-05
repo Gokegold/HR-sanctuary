@@ -1,35 +1,45 @@
-import { useState, useEffect } from 'react';
-import { Fingerprint, Eye, Shield, Loader2, AlertCircle } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Badge } from '@/components/ui/badge';
-import { Separator } from '@/components/ui/separator';
-import { useAuth } from '@/contexts/AuthContext';
+import { useState, useEffect } from "react";
+import { Fingerprint, Eye, Shield, Loader2, AlertCircle } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface BiometricLoginProps {
   onSuccess?: () => void;
   redirectTo?: string;
 }
 
-export default function BiometricLogin({ onSuccess, redirectTo }: BiometricLoginProps) {
+export default function BiometricLogin({
+  onSuccess,
+  redirectTo,
+}: BiometricLoginProps) {
   const { login, loginWithBiometric } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [biometricLoading, setBiometricLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [biometricSupported, setBiometricSupported] = useState(false);
-  
+
   // Form state
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   useEffect(() => {
     // Check biometric support
     const checkSupport = async () => {
       if (window.PublicKeyCredential) {
         try {
-          const available = await PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable();
+          const available =
+            await PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable();
           setBiometricSupported(available);
         } catch {
           setBiometricSupported(false);
@@ -49,10 +59,10 @@ export default function BiometricLogin({ onSuccess, redirectTo }: BiometricLogin
       if (success) {
         onSuccess?.();
       } else {
-        setError('Invalid credentials. Please try again.');
+        setError("Invalid credentials. Please try again.");
       }
     } catch (err) {
-      setError('Login failed. Please try again.');
+      setError("Login failed. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -67,20 +77,20 @@ export default function BiometricLogin({ onSuccess, redirectTo }: BiometricLogin
       if (success) {
         onSuccess?.();
       } else {
-        setError('Biometric authentication failed. Please try again.');
+        setError("Biometric authentication failed. Please try again.");
       }
     } catch (err) {
-      setError('Biometric authentication failed. Please try again.');
+      setError("Biometric authentication failed. Please try again.");
     } finally {
       setBiometricLoading(false);
     }
   };
 
   const demoCredentials = [
-    { email: 'sarah.johnson@hospital.com', role: 'Employee' },
-    { email: 'michael.chen@hospital.com', role: 'HR Officer' },
-    { email: 'emily.rodriguez@hospital.com', role: 'Admin' },
-    { email: 'james.wilson@hospital.com', role: 'Executive' }
+    { email: "sarah.johnson@hospital.com", role: "Employee" },
+    { email: "michael.chen@hospital.com", role: "HR Officer" },
+    { email: "emily.rodriguez@hospital.com", role: "Admin" },
+    { email: "james.wilson@hospital.com", role: "Executive" },
   ];
 
   return (
@@ -95,7 +105,7 @@ export default function BiometricLogin({ onSuccess, redirectTo }: BiometricLogin
             Secure access to your productivity monitoring dashboard
           </CardDescription>
         </CardHeader>
-        
+
         <CardContent className="space-y-6">
           {/* Biometric Login */}
           <div className="space-y-4">
@@ -105,8 +115,8 @@ export default function BiometricLogin({ onSuccess, redirectTo }: BiometricLogin
                 Use your fingerprint or face ID for secure access
               </p>
             </div>
-            
-            <Button 
+
+            <Button
               onClick={handleBiometricLogin}
               disabled={biometricLoading || !biometricSupported}
               className="w-full h-12"
@@ -124,7 +134,7 @@ export default function BiometricLogin({ onSuccess, redirectTo }: BiometricLogin
                 </>
               )}
             </Button>
-            
+
             {!biometricSupported && (
               <div className="text-center">
                 <Badge variant="outline" className="text-xs">
@@ -150,7 +160,7 @@ export default function BiometricLogin({ onSuccess, redirectTo }: BiometricLogin
                 required
               />
             </div>
-            
+
             <div className="space-y-2">
               <Label htmlFor="password">Password</Label>
               <Input
@@ -163,8 +173,8 @@ export default function BiometricLogin({ onSuccess, redirectTo }: BiometricLogin
               />
             </div>
 
-            <Button 
-              type="submit" 
+            <Button
+              type="submit"
               disabled={isLoading}
               className="w-full"
               variant="outline"
@@ -175,7 +185,7 @@ export default function BiometricLogin({ onSuccess, redirectTo }: BiometricLogin
                   Signing in...
                 </>
               ) : (
-                'Sign in with Credentials'
+                "Sign in with Credentials"
               )}
             </Button>
           </form>
@@ -196,7 +206,7 @@ export default function BiometricLogin({ onSuccess, redirectTo }: BiometricLogin
                 Click to auto-fill credentials (password: demo123)
               </p>
             </div>
-            
+
             <div className="grid grid-cols-1 gap-2">
               {demoCredentials.map((cred, index) => (
                 <Button
@@ -206,7 +216,7 @@ export default function BiometricLogin({ onSuccess, redirectTo }: BiometricLogin
                   className="justify-start text-xs h-8"
                   onClick={() => {
                     setEmail(cred.email);
-                    setPassword('demo123');
+                    setPassword("demo123");
                   }}
                 >
                   <Badge variant="secondary" className="mr-2 text-xs">

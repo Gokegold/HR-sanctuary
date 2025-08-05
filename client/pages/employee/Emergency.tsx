@@ -1,15 +1,15 @@
 import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { 
-  AlertTriangle, 
-  Home, 
-  Mic, 
-  MicOff, 
-  Phone, 
-  Shield, 
-  MapPin, 
-  Clock, 
-  FileText, 
+import {
+  AlertTriangle,
+  Home,
+  Mic,
+  MicOff,
+  Phone,
+  Shield,
+  MapPin,
+  Clock,
+  FileText,
   Send,
   Activity,
   Bell,
@@ -23,10 +23,16 @@ import {
   Heart,
   User,
   Building,
-  Siren
+  Siren,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
@@ -34,7 +40,13 @@ import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Progress } from "@/components/ui/progress";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { useAuth } from "@/contexts/AuthContext";
 import SessionTimer from "@/components/auth/SessionTimer";
 
@@ -43,7 +55,7 @@ interface EmergencyType {
   label: string;
   icon: any;
   color: string;
-  priority: 'low' | 'medium' | 'high' | 'critical';
+  priority: "low" | "medium" | "high" | "critical";
   requiresImmediate: boolean;
   description: string;
 }
@@ -57,7 +69,7 @@ interface EmergencyReport {
   audioRecording?: string;
   photos?: string[];
   witnesses?: string[];
-  status: 'reported' | 'acknowledged' | 'responding' | 'resolved';
+  status: "reported" | "acknowledged" | "responding" | "resolved";
   responseTime?: number;
 }
 
@@ -69,7 +81,8 @@ const emergencyTypes: EmergencyType[] = [
     color: "red",
     priority: "critical",
     requiresImmediate: true,
-    description: "Health-related emergency requiring immediate medical attention"
+    description:
+      "Health-related emergency requiring immediate medical attention",
   },
   {
     id: "fire",
@@ -78,7 +91,7 @@ const emergencyTypes: EmergencyType[] = [
     color: "red",
     priority: "critical",
     requiresImmediate: true,
-    description: "Fire or smoke detected, evacuation may be required"
+    description: "Fire or smoke detected, evacuation may be required",
   },
   {
     id: "security",
@@ -87,7 +100,7 @@ const emergencyTypes: EmergencyType[] = [
     color: "red",
     priority: "high",
     requiresImmediate: true,
-    description: "Security breach, unauthorized access, or threat to safety"
+    description: "Security breach, unauthorized access, or threat to safety",
   },
   {
     id: "accident",
@@ -96,7 +109,7 @@ const emergencyTypes: EmergencyType[] = [
     color: "orange",
     priority: "high",
     requiresImmediate: true,
-    description: "Workplace accident or injury requiring assistance"
+    description: "Workplace accident or injury requiring assistance",
   },
   {
     id: "equipment",
@@ -105,7 +118,7 @@ const emergencyTypes: EmergencyType[] = [
     color: "yellow",
     priority: "medium",
     requiresImmediate: false,
-    description: "Critical equipment malfunction affecting operations"
+    description: "Critical equipment malfunction affecting operations",
   },
   {
     id: "environmental",
@@ -114,7 +127,7 @@ const emergencyTypes: EmergencyType[] = [
     color: "orange",
     priority: "high",
     requiresImmediate: true,
-    description: "Chemical spill, gas leak, or environmental danger"
+    description: "Chemical spill, gas leak, or environmental danger",
   },
   {
     id: "other",
@@ -123,8 +136,8 @@ const emergencyTypes: EmergencyType[] = [
     color: "gray",
     priority: "medium",
     requiresImmediate: false,
-    description: "Other emergency situation not listed above"
-  }
+    description: "Other emergency situation not listed above",
+  },
 ];
 
 // Mock emergency reports
@@ -136,7 +149,7 @@ const recentReports: EmergencyReport[] = [
     location: "OR 3",
     description: "Ventilator malfunction during procedure",
     status: "resolved",
-    responseTime: 5
+    responseTime: 5,
   },
   {
     id: "2",
@@ -145,13 +158,15 @@ const recentReports: EmergencyReport[] = [
     location: "Ward B",
     description: "Patient collapse, immediate assistance required",
     status: "resolved",
-    responseTime: 2
-  }
+    responseTime: 2,
+  },
 ];
 
 export default function Emergency() {
   const { user, logout } = useAuth();
-  const [activeReport, setActiveReport] = useState<EmergencyReport | null>(null);
+  const [activeReport, setActiveReport] = useState<EmergencyReport | null>(
+    null,
+  );
   const [selectedType, setSelectedType] = useState<EmergencyType | null>(null);
   const [description, setDescription] = useState("");
   const [location, setLocation] = useState("");
@@ -160,14 +175,14 @@ export default function Emergency() {
   const [recordingDuration, setRecordingDuration] = useState(0);
   const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  
+
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const recordingTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     if (isRecording) {
       recordingTimerRef.current = setInterval(() => {
-        setRecordingDuration(prev => prev + 1);
+        setRecordingDuration((prev) => prev + 1);
       }, 1000);
     } else {
       if (recordingTimerRef.current) {
@@ -193,9 +208,9 @@ export default function Emergency() {
       };
 
       mediaRecorder.onstop = () => {
-        const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+        const audioBlob = new Blob(audioChunks, { type: "audio/wav" });
         setAudioBlob(audioBlob);
-        stream.getTracks().forEach(track => track.stop());
+        stream.getTracks().forEach((track) => track.stop());
       };
 
       mediaRecorderRef.current = mediaRecorder;
@@ -203,8 +218,8 @@ export default function Emergency() {
       setIsRecording(true);
       setRecordingDuration(0);
     } catch (error) {
-      console.error('Error accessing microphone:', error);
-      alert('Unable to access microphone. Please check permissions.');
+      console.error("Error accessing microphone:", error);
+      alert("Unable to access microphone. Please check permissions.");
     }
   };
 
@@ -217,7 +232,7 @@ export default function Emergency() {
 
   const submitEmergencyReport = async () => {
     if (!selectedType || !description.trim()) {
-      alert('Please select emergency type and provide description');
+      alert("Please select emergency type and provide description");
       return;
     }
 
@@ -229,12 +244,12 @@ export default function Emergency() {
       timestamp: new Date(),
       location: location || "Current Location",
       description: description.trim(),
-      witnesses: witnesses ? witnesses.split(',').map(w => w.trim()) : [],
-      status: 'reported'
+      witnesses: witnesses ? witnesses.split(",").map((w) => w.trim()) : [],
+      status: "reported",
     };
 
     // Simulate emergency reporting delay
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    await new Promise((resolve) => setTimeout(resolve, 2000));
 
     setActiveReport(newReport);
     setIsSubmitting(false);
@@ -243,7 +258,9 @@ export default function Emergency() {
     if (selectedType.requiresImmediate) {
       // Simulate immediate response
       setTimeout(() => {
-        setActiveReport(prev => prev ? { ...prev, status: 'acknowledged' } : null);
+        setActiveReport((prev) =>
+          prev ? { ...prev, status: "acknowledged" } : null,
+        );
       }, 5000);
     }
   };
@@ -251,7 +268,7 @@ export default function Emergency() {
   const formatTime = (seconds: number) => {
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = seconds % 60;
-    return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
+    return `${minutes.toString().padStart(2, "0")}:${remainingSeconds.toString().padStart(2, "0")}`;
   };
 
   if (!user) return <div>Loading...</div>;
@@ -269,7 +286,7 @@ export default function Emergency() {
                 <Badge variant="destructive">Emergency Center</Badge>
               </Link>
             </div>
-            
+
             <div className="flex items-center gap-4">
               <SessionTimer />
               <Button variant="ghost" size="icon">
@@ -292,13 +309,24 @@ export default function Emergency() {
             <AlertDescription>
               <div className="flex items-center justify-between">
                 <div>
-                  <strong>Emergency Reported:</strong> {emergencyTypes.find(et => et.id === activeReport.type)?.label}
+                  <strong>Emergency Reported:</strong>{" "}
+                  {
+                    emergencyTypes.find((et) => et.id === activeReport.type)
+                      ?.label
+                  }
                   <br />
                   <span className="text-sm">
-                    Report ID: {activeReport.id} • Status: {activeReport.status.toUpperCase()}
+                    Report ID: {activeReport.id} • Status:{" "}
+                    {activeReport.status.toUpperCase()}
                   </span>
                 </div>
-                <Badge variant={activeReport.status === 'resolved' ? 'default' : 'destructive'}>
+                <Badge
+                  variant={
+                    activeReport.status === "resolved"
+                      ? "default"
+                      : "destructive"
+                  }
+                >
                   {activeReport.status}
                 </Badge>
               </div>
@@ -331,44 +359,68 @@ export default function Emergency() {
                     <Alert className="mb-6">
                       <Phone className="h-4 w-4" />
                       <AlertDescription>
-                        <strong>For life-threatening emergencies, call 911 immediately.</strong>
-                        <br />This system supplements but does not replace emergency services.
+                        <strong>
+                          For life-threatening emergencies, call 911
+                          immediately.
+                        </strong>
+                        <br />
+                        This system supplements but does not replace emergency
+                        services.
                       </AlertDescription>
                     </Alert>
 
                     <div className="space-y-6">
                       {/* Emergency Type Selection */}
                       <div>
-                        <Label className="text-base font-medium mb-4 block">Select Emergency Type</Label>
+                        <Label className="text-base font-medium mb-4 block">
+                          Select Emergency Type
+                        </Label>
                         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
                           {emergencyTypes.map((type) => {
                             const IconComponent = type.icon;
                             return (
-                              <Card 
+                              <Card
                                 key={type.id}
                                 className={`cursor-pointer transition-all hover:shadow-lg ${
-                                  selectedType?.id === type.id ? 'border-red-500 bg-red-500/10' : 'hover:border-red-500/50'
+                                  selectedType?.id === type.id
+                                    ? "border-red-500 bg-red-500/10"
+                                    : "hover:border-red-500/50"
                                 }`}
                                 onClick={() => setSelectedType(type)}
                               >
                                 <CardContent className="p-4">
                                   <div className="flex items-center gap-3 mb-2">
-                                    <div className={`p-2 rounded-lg bg-${type.color}-500/20`}>
-                                      <IconComponent className={`h-5 w-5 text-${type.color}-500`} />
+                                    <div
+                                      className={`p-2 rounded-lg bg-${type.color}-500/20`}
+                                    >
+                                      <IconComponent
+                                        className={`h-5 w-5 text-${type.color}-500`}
+                                      />
                                     </div>
                                     <div>
-                                      <h4 className="font-medium">{type.label}</h4>
-                                      <Badge 
-                                        variant={type.priority === 'critical' ? 'destructive' : 'outline'}
+                                      <h4 className="font-medium">
+                                        {type.label}
+                                      </h4>
+                                      <Badge
+                                        variant={
+                                          type.priority === "critical"
+                                            ? "destructive"
+                                            : "outline"
+                                        }
                                         className="text-xs"
                                       >
                                         {type.priority}
                                       </Badge>
                                     </div>
                                   </div>
-                                  <p className="text-xs text-muted-foreground">{type.description}</p>
+                                  <p className="text-xs text-muted-foreground">
+                                    {type.description}
+                                  </p>
                                   {type.requiresImmediate && (
-                                    <Badge variant="destructive" className="text-xs mt-2">
+                                    <Badge
+                                      variant="destructive"
+                                      className="text-xs mt-2"
+                                    >
                                       Immediate Response
                                     </Badge>
                                   )}
@@ -412,12 +464,18 @@ export default function Emergency() {
 
                           {/* Voice Recording */}
                           <div>
-                            <Label className="text-base font-medium mb-2 block">Voice Recording (Optional)</Label>
+                            <Label className="text-base font-medium mb-2 block">
+                              Voice Recording (Optional)
+                            </Label>
                             <div className="space-y-4">
                               <div className="flex items-center gap-4">
                                 <Button
-                                  onClick={isRecording ? stopRecording : startRecording}
-                                  variant={isRecording ? "destructive" : "outline"}
+                                  onClick={
+                                    isRecording ? stopRecording : startRecording
+                                  }
+                                  variant={
+                                    isRecording ? "destructive" : "outline"
+                                  }
                                   size="lg"
                                 >
                                   {isRecording ? (
@@ -432,7 +490,7 @@ export default function Emergency() {
                                     </>
                                   )}
                                 </Button>
-                                
+
                                 {isRecording && (
                                   <div className="flex items-center gap-2">
                                     <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse"></div>
@@ -446,8 +504,15 @@ export default function Emergency() {
                               {audioBlob && !isRecording && (
                                 <div className="flex items-center gap-4 p-3 bg-muted rounded-lg">
                                   <Play className="h-5 w-5 text-green-500" />
-                                  <span className="text-sm">Audio recorded ({formatTime(recordingDuration)})</span>
-                                  <Button variant="ghost" size="sm" onClick={() => setAudioBlob(null)}>
+                                  <span className="text-sm">
+                                    Audio recorded (
+                                    {formatTime(recordingDuration)})
+                                  </span>
+                                  <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    onClick={() => setAudioBlob(null)}
+                                  >
                                     Remove
                                   </Button>
                                 </div>
@@ -457,7 +522,9 @@ export default function Emergency() {
 
                           {/* Witnesses */}
                           <div>
-                            <Label htmlFor="witnesses">Witnesses (Optional)</Label>
+                            <Label htmlFor="witnesses">
+                              Witnesses (Optional)
+                            </Label>
                             <Input
                               id="witnesses"
                               placeholder="Names of witnesses, separated by commas"
@@ -468,10 +535,10 @@ export default function Emergency() {
                           </div>
 
                           {/* Submit Button */}
-                          <Button 
+                          <Button
                             onClick={submitEmergencyReport}
                             disabled={isSubmitting || !description.trim()}
-                            className={`w-full ${selectedType.requiresImmediate ? 'bg-red-600 hover:bg-red-700' : ''}`}
+                            className={`w-full ${selectedType.requiresImmediate ? "bg-red-600 hover:bg-red-700" : ""}`}
                             size="lg"
                           >
                             {isSubmitting ? (
@@ -500,30 +567,46 @@ export default function Emergency() {
                     Emergency Report Submitted
                   </CardTitle>
                   <CardDescription>
-                    Your emergency report has been submitted and response is being coordinated
+                    Your emergency report has been submitted and response is
+                    being coordinated
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
                     <div className="text-center p-6 bg-red-500/10 border border-red-500/20 rounded-lg">
-                      <h3 className="text-lg font-semibold mb-2">Report Confirmation</h3>
-                      <p className="text-2xl font-bold text-red-500 mb-2">#{activeReport.id}</p>
+                      <h3 className="text-lg font-semibold mb-2">
+                        Report Confirmation
+                      </h3>
+                      <p className="text-2xl font-bold text-red-500 mb-2">
+                        #{activeReport.id}
+                      </p>
                       <p className="text-sm text-muted-foreground">
-                        Report submitted at {activeReport.timestamp.toLocaleTimeString()}
+                        Report submitted at{" "}
+                        {activeReport.timestamp.toLocaleTimeString()}
                       </p>
                     </div>
 
                     <div className="grid md:grid-cols-2 gap-4">
                       <div>
-                        <Label className="text-sm font-medium">Emergency Type</Label>
-                        <p className="text-sm">{emergencyTypes.find(et => et.id === activeReport.type)?.label}</p>
+                        <Label className="text-sm font-medium">
+                          Emergency Type
+                        </Label>
+                        <p className="text-sm">
+                          {
+                            emergencyTypes.find(
+                              (et) => et.id === activeReport.type,
+                            )?.label
+                          }
+                        </p>
                       </div>
                       <div>
                         <Label className="text-sm font-medium">Location</Label>
                         <p className="text-sm">{activeReport.location}</p>
                       </div>
                       <div className="md:col-span-2">
-                        <Label className="text-sm font-medium">Description</Label>
+                        <Label className="text-sm font-medium">
+                          Description
+                        </Label>
                         <p className="text-sm">{activeReport.description}</p>
                       </div>
                     </div>
@@ -531,13 +614,14 @@ export default function Emergency() {
                     <Alert>
                       <Clock className="h-4 w-4" />
                       <AlertDescription>
-                        Response team has been notified. Please remain in your current location unless instructed otherwise.
+                        Response team has been notified. Please remain in your
+                        current location unless instructed otherwise.
                       </AlertDescription>
                     </Alert>
 
-                    <Button 
+                    <Button
                       onClick={() => setActiveReport(null)}
-                      variant="outline" 
+                      variant="outline"
                       className="w-full"
                     >
                       Report Another Emergency
@@ -564,8 +648,12 @@ export default function Emergency() {
                 {activeReport ? (
                   <div className="space-y-6">
                     <div className="text-center">
-                      <Badge 
-                        variant={activeReport.status === 'resolved' ? 'default' : 'destructive'}
+                      <Badge
+                        variant={
+                          activeReport.status === "resolved"
+                            ? "default"
+                            : "destructive"
+                        }
                         className="text-lg px-4 py-2"
                       >
                         {activeReport.status.toUpperCase()}
@@ -573,9 +661,13 @@ export default function Emergency() {
                     </div>
 
                     <div className="space-y-3">
-                      <div className={`flex items-center gap-3 p-3 rounded-lg ${
-                        activeReport.status === 'reported' ? 'bg-blue-500/10 border border-blue-500/20' : 'bg-muted'
-                      }`}>
+                      <div
+                        className={`flex items-center gap-3 p-3 rounded-lg ${
+                          activeReport.status === "reported"
+                            ? "bg-blue-500/10 border border-blue-500/20"
+                            : "bg-muted"
+                        }`}
+                      >
                         <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
                         <div>
                           <p className="font-medium">Emergency Reported</p>
@@ -585,44 +677,88 @@ export default function Emergency() {
                         </div>
                       </div>
 
-                      <div className={`flex items-center gap-3 p-3 rounded-lg ${
-                        ['acknowledged', 'responding', 'resolved'].includes(activeReport.status) ? 'bg-orange-500/10 border border-orange-500/20' : 'bg-muted opacity-50'
-                      }`}>
-                        <div className={`w-3 h-3 rounded-full ${
-                          ['acknowledged', 'responding', 'resolved'].includes(activeReport.status) ? 'bg-orange-500' : 'bg-gray-400'
-                        }`}></div>
+                      <div
+                        className={`flex items-center gap-3 p-3 rounded-lg ${
+                          ["acknowledged", "responding", "resolved"].includes(
+                            activeReport.status,
+                          )
+                            ? "bg-orange-500/10 border border-orange-500/20"
+                            : "bg-muted opacity-50"
+                        }`}
+                      >
+                        <div
+                          className={`w-3 h-3 rounded-full ${
+                            ["acknowledged", "responding", "resolved"].includes(
+                              activeReport.status,
+                            )
+                              ? "bg-orange-500"
+                              : "bg-gray-400"
+                          }`}
+                        ></div>
                         <div>
                           <p className="font-medium">Response Team Notified</p>
                           <p className="text-sm text-muted-foreground">
-                            {['acknowledged', 'responding', 'resolved'].includes(activeReport.status) ? 'Completed' : 'Pending'}
+                            {[
+                              "acknowledged",
+                              "responding",
+                              "resolved",
+                            ].includes(activeReport.status)
+                              ? "Completed"
+                              : "Pending"}
                           </p>
                         </div>
                       </div>
 
-                      <div className={`flex items-center gap-3 p-3 rounded-lg ${
-                        ['responding', 'resolved'].includes(activeReport.status) ? 'bg-yellow-500/10 border border-yellow-500/20' : 'bg-muted opacity-50'
-                      }`}>
-                        <div className={`w-3 h-3 rounded-full ${
-                          ['responding', 'resolved'].includes(activeReport.status) ? 'bg-yellow-500' : 'bg-gray-400'
-                        }`}></div>
+                      <div
+                        className={`flex items-center gap-3 p-3 rounded-lg ${
+                          ["responding", "resolved"].includes(
+                            activeReport.status,
+                          )
+                            ? "bg-yellow-500/10 border border-yellow-500/20"
+                            : "bg-muted opacity-50"
+                        }`}
+                      >
+                        <div
+                          className={`w-3 h-3 rounded-full ${
+                            ["responding", "resolved"].includes(
+                              activeReport.status,
+                            )
+                              ? "bg-yellow-500"
+                              : "bg-gray-400"
+                          }`}
+                        ></div>
                         <div>
                           <p className="font-medium">Response in Progress</p>
                           <p className="text-sm text-muted-foreground">
-                            {['responding', 'resolved'].includes(activeReport.status) ? 'In Progress' : 'Pending'}
+                            {["responding", "resolved"].includes(
+                              activeReport.status,
+                            )
+                              ? "In Progress"
+                              : "Pending"}
                           </p>
                         </div>
                       </div>
 
-                      <div className={`flex items-center gap-3 p-3 rounded-lg ${
-                        activeReport.status === 'resolved' ? 'bg-green-500/10 border border-green-500/20' : 'bg-muted opacity-50'
-                      }`}>
-                        <div className={`w-3 h-3 rounded-full ${
-                          activeReport.status === 'resolved' ? 'bg-green-500' : 'bg-gray-400'
-                        }`}></div>
+                      <div
+                        className={`flex items-center gap-3 p-3 rounded-lg ${
+                          activeReport.status === "resolved"
+                            ? "bg-green-500/10 border border-green-500/20"
+                            : "bg-muted opacity-50"
+                        }`}
+                      >
+                        <div
+                          className={`w-3 h-3 rounded-full ${
+                            activeReport.status === "resolved"
+                              ? "bg-green-500"
+                              : "bg-gray-400"
+                          }`}
+                        ></div>
                         <div>
                           <p className="font-medium">Emergency Resolved</p>
                           <p className="text-sm text-muted-foreground">
-                            {activeReport.status === 'resolved' ? 'Completed' : 'Pending'}
+                            {activeReport.status === "resolved"
+                              ? "Completed"
+                              : "Pending"}
                           </p>
                         </div>
                       </div>
@@ -631,7 +767,8 @@ export default function Emergency() {
                     <Alert>
                       <Shield className="h-4 w-4" />
                       <AlertDescription>
-                        Emergency response procedures are being followed. Updates will appear here automatically.
+                        Emergency response procedures are being followed.
+                        Updates will appear here automatically.
                       </AlertDescription>
                     </Alert>
                   </div>
@@ -664,17 +801,29 @@ export default function Emergency() {
                     </div>
                   ) : (
                     recentReports.map((report) => {
-                      const emergencyType = emergencyTypes.find(et => et.id === report.type);
-                      const IconComponent = emergencyType?.icon || AlertTriangle;
-                      
+                      const emergencyType = emergencyTypes.find(
+                        (et) => et.id === report.type,
+                      );
+                      const IconComponent =
+                        emergencyType?.icon || AlertTriangle;
+
                       return (
-                        <div key={report.id} className="flex items-start gap-4 p-4 border rounded-lg">
-                          <div className={`p-2 rounded-lg bg-${emergencyType?.color}-500/20`}>
-                            <IconComponent className={`h-5 w-5 text-${emergencyType?.color}-500`} />
+                        <div
+                          key={report.id}
+                          className="flex items-start gap-4 p-4 border rounded-lg"
+                        >
+                          <div
+                            className={`p-2 rounded-lg bg-${emergencyType?.color}-500/20`}
+                          >
+                            <IconComponent
+                              className={`h-5 w-5 text-${emergencyType?.color}-500`}
+                            />
                           </div>
                           <div className="flex-1">
                             <div className="flex items-center gap-2 mb-1">
-                              <h4 className="font-medium">{emergencyType?.label}</h4>
+                              <h4 className="font-medium">
+                                {emergencyType?.label}
+                              </h4>
                               <Badge variant="outline">#{report.id}</Badge>
                               {report.responseTime && (
                                 <Badge variant="secondary">
@@ -682,12 +831,21 @@ export default function Emergency() {
                                 </Badge>
                               )}
                             </div>
-                            <p className="text-sm text-muted-foreground mb-2">{report.description}</p>
+                            <p className="text-sm text-muted-foreground mb-2">
+                              {report.description}
+                            </p>
                             <div className="text-xs text-muted-foreground">
-                              {report.timestamp.toLocaleString()} • {report.location}
+                              {report.timestamp.toLocaleString()} •{" "}
+                              {report.location}
                             </div>
                           </div>
-                          <Badge variant={report.status === 'resolved' ? 'default' : 'destructive'}>
+                          <Badge
+                            variant={
+                              report.status === "resolved"
+                                ? "default"
+                                : "destructive"
+                            }
+                          >
                             {report.status}
                           </Badge>
                         </div>

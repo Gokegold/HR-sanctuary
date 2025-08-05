@@ -44,135 +44,135 @@ const App = () => (
             {/* Public routes */}
             <Route path="/" element={<Index />} />
             <Route path="/unauthorized" element={<Unauthorized />} />
-            
+
             {/* Employee routes */}
-            <Route 
-              path="/employee" 
+            <Route
+              path="/employee"
               element={
-                <ProtectedRoute allowedRoles={['employee']}>
+                <ProtectedRoute allowedRoles={["employee"]}>
                   <EmployeeApp />
                 </ProtectedRoute>
-              } 
+              }
             />
-            <Route 
-              path="/employee-home" 
+            <Route
+              path="/employee-home"
               element={
-                <ProtectedRoute allowedRoles={['employee']}>
+                <ProtectedRoute allowedRoles={["employee"]}>
                   <EmployeeDashboard />
                 </ProtectedRoute>
-              } 
+              }
             />
-            <Route 
-              path="/employee/break-center" 
+            <Route
+              path="/employee/break-center"
               element={
-                <ProtectedRoute allowedRoles={['employee']}>
+                <ProtectedRoute allowedRoles={["employee"]}>
                   <BreakCenter />
                 </ProtectedRoute>
-              } 
+              }
             />
-            <Route 
-              path="/employee/emergency" 
+            <Route
+              path="/employee/emergency"
               element={
-                <ProtectedRoute allowedRoles={['employee']}>
+                <ProtectedRoute allowedRoles={["employee"]}>
                   <Emergency />
                 </ProtectedRoute>
-              } 
+              }
             />
-            <Route 
-              path="/employee/tasks" 
+            <Route
+              path="/employee/tasks"
               element={
-                <ProtectedRoute allowedRoles={['employee']}>
+                <ProtectedRoute allowedRoles={["employee"]}>
                   <Tasks />
                 </ProtectedRoute>
-              } 
+              }
             />
-            <Route 
-              path="/employee/notifications" 
+            <Route
+              path="/employee/notifications"
               element={
-                <ProtectedRoute allowedRoles={['employee']}>
+                <ProtectedRoute allowedRoles={["employee"]}>
                   <Notifications />
                 </ProtectedRoute>
-              } 
+              }
             />
-            <Route 
-              path="/employee/compliance" 
+            <Route
+              path="/employee/compliance"
               element={
-                <ProtectedRoute allowedRoles={['employee']}>
+                <ProtectedRoute allowedRoles={["employee"]}>
                   <Compliance />
                 </ProtectedRoute>
-              } 
+              }
             />
 
             {/* HR routes */}
-            <Route 
-              path="/hr" 
+            <Route
+              path="/hr"
               element={
-                <ProtectedRoute allowedRoles={['hr']}>
+                <ProtectedRoute allowedRoles={["hr"]}>
                   <HRApp />
                 </ProtectedRoute>
-              } 
+              }
             />
-            <Route 
-              path="/hr-app" 
+            <Route
+              path="/hr-app"
               element={
-                <ProtectedRoute allowedRoles={['hr']}>
+                <ProtectedRoute allowedRoles={["hr"]}>
                   <HRDashboard />
                 </ProtectedRoute>
-              } 
+              }
             />
 
             {/* Admin routes */}
-            <Route 
-              path="/admin" 
+            <Route
+              path="/admin"
               element={
-                <ProtectedRoute allowedRoles={['admin']}>
+                <ProtectedRoute allowedRoles={["admin"]}>
                   <AdminApp />
                 </ProtectedRoute>
-              } 
+              }
             />
-            <Route 
-              path="/admin-dashboard" 
+            <Route
+              path="/admin-dashboard"
               element={
-                <ProtectedRoute allowedRoles={['admin']}>
+                <ProtectedRoute allowedRoles={["admin"]}>
                   <AdminDashboard />
                 </ProtectedRoute>
-              } 
+              }
             />
 
             {/* Executive routes */}
-            <Route 
-              path="/executive" 
+            <Route
+              path="/executive"
               element={
-                <ProtectedRoute allowedRoles={['executive']}>
+                <ProtectedRoute allowedRoles={["executive"]}>
                   <ExecutiveApp />
                 </ProtectedRoute>
-              } 
+              }
             />
 
             {/* Shared utility routes (accessible to all authenticated users) */}
-            <Route 
-              path="/health" 
+            <Route
+              path="/health"
               element={
                 <ProtectedRoute>
                   <Health />
                 </ProtectedRoute>
-              } 
+              }
             />
-            <Route 
-              path="/wearable-app" 
+            <Route
+              path="/wearable-app"
               element={
                 <ProtectedRoute>
                   <WearableApp />
                 </ProtectedRoute>
-              } 
+              }
             />
-            <Route 
-              path="/workstation" 
+            <Route
+              path="/workstation"
               element={
                 <ProtectedRoute>
                   <WorkstationApp />
                 </ProtectedRoute>
-              } 
+              }
             />
 
             {/* Catch-all route */}

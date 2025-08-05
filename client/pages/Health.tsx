@@ -1,7 +1,13 @@
 import { Link } from "react-router-dom";
 import { Heart, Home } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 export default function Health() {
   return (
@@ -19,7 +25,8 @@ export default function Health() {
           </CardHeader>
           <CardContent>
             <p className="text-muted-foreground mb-4">
-              This component is under development and will include health monitoring features.
+              This component is under development and will include health
+              monitoring features.
             </p>
             <Link to="/">
               <Button>

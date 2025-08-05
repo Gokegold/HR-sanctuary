@@ -1,18 +1,18 @@
-import { ReactNode } from 'react';
-import { Navigate } from 'react-router-dom';
-import { useAuth, User } from '@/contexts/AuthContext';
-import BiometricLogin from './BiometricLogin';
+import { ReactNode } from "react";
+import { Navigate } from "react-router-dom";
+import { useAuth, User } from "@/contexts/AuthContext";
+import BiometricLogin from "./BiometricLogin";
 
 interface ProtectedRouteProps {
   children: ReactNode;
-  allowedRoles?: User['role'][];
+  allowedRoles?: User["role"][];
   redirectTo?: string;
 }
 
-export default function ProtectedRoute({ 
-  children, 
-  allowedRoles = [], 
-  redirectTo = '/login' 
+export default function ProtectedRoute({
+  children,
+  allowedRoles = [],
+  redirectTo = "/login",
 }: ProtectedRouteProps) {
   const { user, isAuthenticated } = useAuth();
 

@@ -1,9 +1,15 @@
-import { useState, useEffect } from 'react';
-import { Clock, AlertTriangle, LogOut } from 'lucide-react';
-import { useAuth } from '@/contexts/AuthContext';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
+import { useState, useEffect } from "react";
+import { Clock, AlertTriangle, LogOut } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 
 export default function SessionTimer() {
   const { timeUntilLogout, logout, updateLastActivity, user } = useAuth();
@@ -11,7 +17,7 @@ export default function SessionTimer() {
 
   const minutes = Math.floor(timeUntilLogout / 60000);
   const seconds = Math.floor((timeUntilLogout % 60000) / 1000);
-  
+
   // Show warning in last 5 minutes
   useEffect(() => {
     setShowWarning(timeUntilLogout <= 5 * 60 * 1000 && timeUntilLogout > 0);
@@ -20,7 +26,7 @@ export default function SessionTimer() {
   const formatTime = (totalSeconds: number) => {
     const mins = Math.floor(totalSeconds / 60);
     const secs = totalSeconds % 60;
-    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+    return `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
   };
 
   const extendSession = () => {
@@ -35,7 +41,9 @@ export default function SessionTimer() {
       {/* Always visible timer in header */}
       <div className="flex items-center gap-2 text-sm">
         <Clock className="h-4 w-4" />
-        <span className={minutes < 5 ? 'text-red-400' : 'text-muted-foreground'}>
+        <span
+          className={minutes < 5 ? "text-red-400" : "text-muted-foreground"}
+        >
           {formatTime(minutes * 60 + seconds)}
         </span>
       </div>
@@ -53,7 +61,7 @@ export default function SessionTimer() {
                 Your session will expire due to inactivity
               </CardDescription>
             </CardHeader>
-            
+
             <CardContent className="space-y-4">
               <div className="text-center">
                 <div className="text-3xl font-bold text-red-400 mb-2">
@@ -65,7 +73,7 @@ export default function SessionTimer() {
               </div>
 
               <div className="flex gap-2">
-                <Button 
+                <Button
                   onClick={extendSession}
                   className="flex-1"
                   variant="default"
@@ -73,12 +81,8 @@ export default function SessionTimer() {
                   <Clock className="h-4 w-4 mr-2" />
                   Extend Session
                 </Button>
-                
-                <Button 
-                  onClick={logout}
-                  variant="outline" 
-                  className="flex-1"
-                >
+
+                <Button onClick={logout} variant="outline" className="flex-1">
                   <LogOut className="h-4 w-4 mr-2" />
                   Logout Now
                 </Button>

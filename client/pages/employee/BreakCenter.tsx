@@ -1,14 +1,14 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { 
-  Coffee, 
-  Home, 
-  Timer, 
-  Fingerprint, 
-  Play, 
-  Pause, 
-  Square, 
-  Clock, 
+import {
+  Coffee,
+  Home,
+  Timer,
+  Fingerprint,
+  Play,
+  Pause,
+  Square,
+  Clock,
   AlertTriangle,
   CheckCircle,
   Utensils,
@@ -19,10 +19,16 @@ import {
   History,
   Bell,
   Settings,
-  LogOut
+  LogOut,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
@@ -49,7 +55,7 @@ interface BreakSession {
   duration: number;
   biometricVerified: boolean;
   location: string;
-  status: 'active' | 'completed' | 'expired';
+  status: "active" | "completed" | "expired";
 }
 
 const breakTypes: BreakType[] = [
@@ -60,7 +66,7 @@ const breakTypes: BreakType[] = [
     maxPerDay: 2,
     icon: Coffee,
     color: "blue",
-    description: "Standard rest break"
+    description: "Standard rest break",
   },
   {
     code: "BRK30",
@@ -69,7 +75,7 @@ const breakTypes: BreakType[] = [
     maxPerDay: 1,
     icon: Coffee,
     color: "green",
-    description: "Extended rest break"
+    description: "Extended rest break",
   },
   {
     code: "LUNCH",
@@ -78,7 +84,7 @@ const breakTypes: BreakType[] = [
     maxPerDay: 1,
     icon: Utensils,
     color: "orange",
-    description: "Meal break"
+    description: "Meal break",
   },
   {
     code: "WC",
@@ -87,7 +93,7 @@ const breakTypes: BreakType[] = [
     maxPerDay: 8,
     icon: Toilet,
     color: "purple",
-    description: "Personal needs"
+    description: "Personal needs",
   },
   {
     code: "ERND",
@@ -96,7 +102,7 @@ const breakTypes: BreakType[] = [
     maxPerDay: 2,
     icon: Car,
     color: "yellow",
-    description: "Work-related errand"
+    description: "Work-related errand",
   },
   {
     code: "EMG",
@@ -105,8 +111,8 @@ const breakTypes: BreakType[] = [
     maxPerDay: 99,
     icon: AlertTriangle,
     color: "red",
-    description: "Emergency situation"
-  }
+    description: "Emergency situation",
+  },
 ];
 
 // Mock data for today's breaks
@@ -119,7 +125,7 @@ const todaysBreaks: BreakSession[] = [
     duration: 15,
     biometricVerified: true,
     location: "Break Room A",
-    status: 'completed'
+    status: "completed",
   },
   {
     id: "2",
@@ -129,8 +135,8 @@ const todaysBreaks: BreakSession[] = [
     duration: 30,
     biometricVerified: true,
     location: "Cafeteria",
-    status: 'completed'
-  }
+    status: "completed",
+  },
 ];
 
 export default function BreakCenter() {
@@ -142,14 +148,16 @@ export default function BreakCenter() {
 
   // Timer for active break
   useEffect(() => {
-    if (currentBreak && currentBreak.status === 'active') {
+    if (currentBreak && currentBreak.status === "active") {
       const interval = setInterval(() => {
         const elapsed = Date.now() - currentBreak.startTime.getTime();
-        const breakType = breakTypes.find(bt => bt.code === currentBreak.type);
+        const breakType = breakTypes.find(
+          (bt) => bt.code === currentBreak.type,
+        );
         if (breakType && breakType.duration > 0) {
-          const remaining = (breakType.duration * 60 * 1000) - elapsed;
+          const remaining = breakType.duration * 60 * 1000 - elapsed;
           setTimeRemaining(Math.max(0, remaining));
-          
+
           if (remaining <= 0) {
             // Auto-end break when time expires
             endBreak();
@@ -163,10 +171,10 @@ export default function BreakCenter() {
 
   const startBreak = async (breakType: BreakType) => {
     setBiometricScanning(true);
-    
+
     // Simulate biometric verification
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+
     const newBreak: BreakSession = {
       id: Date.now().toString(),
       type: breakType.code,
@@ -174,9 +182,9 @@ export default function BreakCenter() {
       duration: breakType.duration,
       biometricVerified: true,
       location: "Current Location",
-      status: 'active'
+      status: "active",
     };
-    
+
     setCurrentBreak(newBreak);
     setTimeRemaining(breakType.duration * 60 * 1000);
     setBiometricScanning(false);
@@ -184,18 +192,18 @@ export default function BreakCenter() {
 
   const endBreak = async () => {
     if (!currentBreak) return;
-    
+
     setBiometricScanning(true);
-    
+
     // Simulate biometric re-verification
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    
+    await new Promise((resolve) => setTimeout(resolve, 1500));
+
     const updatedBreak = {
       ...currentBreak,
       endTime: new Date(),
-      status: 'completed' as const
+      status: "completed" as const,
     };
-    
+
     // In real app, this would save to the backend
     setCurrentBreak(null);
     setTimeRemaining(0);
@@ -205,12 +213,14 @@ export default function BreakCenter() {
   const formatTime = (milliseconds: number) => {
     const minutes = Math.floor(milliseconds / 60000);
     const seconds = Math.floor((milliseconds % 60000) / 1000);
-    return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    return `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
   };
 
   const getBreakUsage = (breakCode: string) => {
-    const used = breakHistory.filter(b => b.type === breakCode && b.status === 'completed').length;
-    const breakType = breakTypes.find(bt => bt.code === breakCode);
+    const used = breakHistory.filter(
+      (b) => b.type === breakCode && b.status === "completed",
+    ).length;
+    const breakType = breakTypes.find((bt) => bt.code === breakCode);
     return { used, max: breakType?.maxPerDay || 0 };
   };
 
@@ -229,7 +239,7 @@ export default function BreakCenter() {
                 <Badge variant="secondary">Break Center</Badge>
               </Link>
             </div>
-            
+
             <div className="flex items-center gap-4">
               <SessionTimer />
               <Button variant="ghost" size="icon">
@@ -252,11 +262,17 @@ export default function BreakCenter() {
             <AlertDescription>
               <div className="flex items-center justify-between">
                 <div>
-                  <strong>Break Active:</strong> {breakTypes.find(bt => bt.code === currentBreak.type)?.label}
+                  <strong>Break Active:</strong>{" "}
+                  {
+                    breakTypes.find((bt) => bt.code === currentBreak.type)
+                      ?.label
+                  }
                   <br />
-                  <span className="text-sm">Started at {currentBreak.startTime.toLocaleTimeString()}</span>
+                  <span className="text-sm">
+                    Started at {currentBreak.startTime.toLocaleTimeString()}
+                  </span>
                 </div>
-                {currentBreak.type !== 'EMG' && (
+                {currentBreak.type !== "EMG" && (
                   <div className="text-right">
                     <div className="text-2xl font-bold text-orange-400">
                       {formatTime(timeRemaining)}
@@ -286,29 +302,64 @@ export default function BreakCenter() {
                     Active Break Session
                   </CardTitle>
                   <CardDescription>
-                    You are currently on a {breakTypes.find(bt => bt.code === currentBreak.type)?.label}
+                    You are currently on a{" "}
+                    {
+                      breakTypes.find((bt) => bt.code === currentBreak.type)
+                        ?.label
+                    }
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6">
                   <div className="text-center">
                     <div className="text-6xl font-bold text-orange-400 mb-2">
-                      {currentBreak.type !== 'EMG' ? formatTime(timeRemaining) : 'ACTIVE'}
+                      {currentBreak.type !== "EMG"
+                        ? formatTime(timeRemaining)
+                        : "ACTIVE"}
                     </div>
                     <p className="text-muted-foreground">
-                      {currentBreak.type !== 'EMG' ? 'Time remaining' : 'Emergency break in progress'}
+                      {currentBreak.type !== "EMG"
+                        ? "Time remaining"
+                        : "Emergency break in progress"}
                     </p>
                   </div>
 
-                  {currentBreak.type !== 'EMG' && (
+                  {currentBreak.type !== "EMG" && (
                     <div>
                       <div className="flex justify-between items-center mb-2">
                         <span className="text-sm">Progress</span>
                         <span className="text-sm">
-                          {Math.round(((breakTypes.find(bt => bt.code === currentBreak.type)?.duration! * 60 * 1000 - timeRemaining) / (breakTypes.find(bt => bt.code === currentBreak.type)?.duration! * 60 * 1000)) * 100)}%
+                          {Math.round(
+                            ((breakTypes.find(
+                              (bt) => bt.code === currentBreak.type,
+                            )?.duration! *
+                              60 *
+                              1000 -
+                              timeRemaining) /
+                              (breakTypes.find(
+                                (bt) => bt.code === currentBreak.type,
+                              )?.duration! *
+                                60 *
+                                1000)) *
+                              100,
+                          )}
+                          %
                         </span>
                       </div>
-                      <Progress 
-                        value={((breakTypes.find(bt => bt.code === currentBreak.type)?.duration! * 60 * 1000 - timeRemaining) / (breakTypes.find(bt => bt.code === currentBreak.type)?.duration! * 60 * 1000)) * 100} 
+                      <Progress
+                        value={
+                          ((breakTypes.find(
+                            (bt) => bt.code === currentBreak.type,
+                          )?.duration! *
+                            60 *
+                            1000 -
+                            timeRemaining) /
+                            (breakTypes.find(
+                              (bt) => bt.code === currentBreak.type,
+                            )?.duration! *
+                              60 *
+                              1000)) *
+                          100
+                        }
                         className="h-3"
                       />
                     </div>
@@ -317,7 +368,9 @@ export default function BreakCenter() {
                   <div className="grid grid-cols-2 gap-4 text-center">
                     <div>
                       <p className="text-sm text-muted-foreground">Started</p>
-                      <p className="font-medium">{currentBreak.startTime.toLocaleTimeString()}</p>
+                      <p className="font-medium">
+                        {currentBreak.startTime.toLocaleTimeString()}
+                      </p>
                     </div>
                     <div>
                       <p className="text-sm text-muted-foreground">Location</p>
@@ -325,7 +378,7 @@ export default function BreakCenter() {
                     </div>
                   </div>
 
-                  <Button 
+                  <Button
                     onClick={endBreak}
                     disabled={biometricScanning}
                     className="w-full bg-green-600 hover:bg-green-700"
@@ -351,21 +404,29 @@ export default function BreakCenter() {
                   const IconComponent = breakType.icon;
                   const usage = getBreakUsage(breakType.code);
                   const canTakeBreak = usage.used < usage.max;
-                  
+
                   return (
-                    <Card 
-                      key={breakType.code} 
-                      className={`transition-all hover:shadow-lg ${canTakeBreak ? 'hover:border-primary/50' : 'opacity-60'}`}
+                    <Card
+                      key={breakType.code}
+                      className={`transition-all hover:shadow-lg ${canTakeBreak ? "hover:border-primary/50" : "opacity-60"}`}
                     >
                       <CardHeader>
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-3">
-                            <div className={`p-3 rounded-lg bg-${breakType.color}-500/20`}>
-                              <IconComponent className={`h-6 w-6 text-${breakType.color}-500`} />
+                            <div
+                              className={`p-3 rounded-lg bg-${breakType.color}-500/20`}
+                            >
+                              <IconComponent
+                                className={`h-6 w-6 text-${breakType.color}-500`}
+                              />
                             </div>
                             <div>
-                              <CardTitle className="text-lg">{breakType.label}</CardTitle>
-                              <CardDescription>{breakType.description}</CardDescription>
+                              <CardTitle className="text-lg">
+                                {breakType.label}
+                              </CardTitle>
+                              <CardDescription>
+                                {breakType.description}
+                              </CardDescription>
                             </div>
                           </div>
                         </div>
@@ -375,7 +436,9 @@ export default function BreakCenter() {
                           <div className="flex justify-between text-sm">
                             <span>Duration:</span>
                             <span className="font-medium">
-                              {breakType.duration === 0 ? 'Variable' : `${breakType.duration} min`}
+                              {breakType.duration === 0
+                                ? "Variable"
+                                : `${breakType.duration} min`}
                             </span>
                           </div>
                           <div className="flex justify-between text-sm">
@@ -384,18 +447,25 @@ export default function BreakCenter() {
                               {usage.used}/{usage.max}
                             </span>
                           </div>
-                          
+
                           {usage.max < 99 && (
                             <div>
                               <div className="flex justify-between items-center mb-1">
-                                <span className="text-xs text-muted-foreground">Daily Allowance</span>
-                                <span className="text-xs">{Math.round((usage.used / usage.max) * 100)}%</span>
+                                <span className="text-xs text-muted-foreground">
+                                  Daily Allowance
+                                </span>
+                                <span className="text-xs">
+                                  {Math.round((usage.used / usage.max) * 100)}%
+                                </span>
                               </div>
-                              <Progress value={(usage.used / usage.max) * 100} className="h-1" />
+                              <Progress
+                                value={(usage.used / usage.max) * 100}
+                                className="h-1"
+                              />
                             </div>
                           )}
 
-                          <Button 
+                          <Button
                             onClick={() => startBreak(breakType)}
                             disabled={!canTakeBreak || biometricScanning}
                             className="w-full"
@@ -447,17 +517,28 @@ export default function BreakCenter() {
                     </div>
                   ) : (
                     breakHistory.map((session) => {
-                      const breakType = breakTypes.find(bt => bt.code === session.type);
+                      const breakType = breakTypes.find(
+                        (bt) => bt.code === session.type,
+                      );
                       const IconComponent = breakType?.icon || Coffee;
-                      
+
                       return (
-                        <div key={session.id} className="flex items-center gap-4 p-4 border rounded-lg">
-                          <div className={`p-2 rounded-lg bg-${breakType?.color}-500/20`}>
-                            <IconComponent className={`h-5 w-5 text-${breakType?.color}-500`} />
+                        <div
+                          key={session.id}
+                          className="flex items-center gap-4 p-4 border rounded-lg"
+                        >
+                          <div
+                            className={`p-2 rounded-lg bg-${breakType?.color}-500/20`}
+                          >
+                            <IconComponent
+                              className={`h-5 w-5 text-${breakType?.color}-500`}
+                            />
                           </div>
                           <div className="flex-1">
                             <div className="flex items-center gap-2 mb-1">
-                              <h4 className="font-medium">{breakType?.label}</h4>
+                              <h4 className="font-medium">
+                                {breakType?.label}
+                              </h4>
                               <Badge variant="outline">
                                 {session.duration} min
                               </Badge>
@@ -469,11 +550,18 @@ export default function BreakCenter() {
                               )}
                             </div>
                             <div className="text-sm text-muted-foreground">
-                              {session.startTime.toLocaleTimeString()} - {session.endTime?.toLocaleTimeString()}
+                              {session.startTime.toLocaleTimeString()} -{" "}
+                              {session.endTime?.toLocaleTimeString()}
                               <span className="ml-2">• {session.location}</span>
                             </div>
                           </div>
-                          <Badge variant={session.status === 'completed' ? 'default' : 'destructive'}>
+                          <Badge
+                            variant={
+                              session.status === "completed"
+                                ? "default"
+                                : "destructive"
+                            }
+                          >
                             {session.status}
                           </Badge>
                         </div>
@@ -492,9 +580,12 @@ export default function BreakCenter() {
                 <CardContent className="p-6">
                   <div className="text-center">
                     <div className="text-3xl font-bold text-primary mb-2">
-                      {breakHistory.reduce((total, b) => total + b.duration, 0)}m
+                      {breakHistory.reduce((total, b) => total + b.duration, 0)}
+                      m
                     </div>
-                    <p className="text-sm text-muted-foreground">Total Break Time</p>
+                    <p className="text-sm text-muted-foreground">
+                      Total Break Time
+                    </p>
                   </div>
                 </CardContent>
               </Card>
@@ -505,7 +596,9 @@ export default function BreakCenter() {
                     <div className="text-3xl font-bold text-green-400 mb-2">
                       {breakHistory.length}
                     </div>
-                    <p className="text-sm text-muted-foreground">Breaks Taken</p>
+                    <p className="text-sm text-muted-foreground">
+                      Breaks Taken
+                    </p>
                   </div>
                 </CardContent>
               </Card>
@@ -514,9 +607,19 @@ export default function BreakCenter() {
                 <CardContent className="p-6">
                   <div className="text-center">
                     <div className="text-3xl font-bold text-orange-400 mb-2">
-                      {breakHistory.length > 0 ? Math.round(breakHistory.reduce((total, b) => total + b.duration, 0) / breakHistory.length) : 0}m
+                      {breakHistory.length > 0
+                        ? Math.round(
+                            breakHistory.reduce(
+                              (total, b) => total + b.duration,
+                              0,
+                            ) / breakHistory.length,
+                          )
+                        : 0}
+                      m
                     </div>
-                    <p className="text-sm text-muted-foreground">Average Duration</p>
+                    <p className="text-sm text-muted-foreground">
+                      Average Duration
+                    </p>
                   </div>
                 </CardContent>
               </Card>
@@ -527,7 +630,9 @@ export default function BreakCenter() {
                     <div className="text-3xl font-bold text-blue-400 mb-2">
                       100%
                     </div>
-                    <p className="text-sm text-muted-foreground">Compliance Rate</p>
+                    <p className="text-sm text-muted-foreground">
+                      Compliance Rate
+                    </p>
                   </div>
                 </CardContent>
               </Card>
@@ -547,17 +652,19 @@ export default function BreakCenter() {
                     <div>
                       <p className="font-medium">Excellent Compliance</p>
                       <p className="text-sm text-muted-foreground">
-                        You're following break guidelines perfectly. Keep up the good work!
+                        You're following break guidelines perfectly. Keep up the
+                        good work!
                       </p>
                     </div>
                   </div>
-                  
+
                   <div className="flex items-center gap-3 p-3 bg-blue-500/10 border border-blue-500/20 rounded-lg">
                     <Timer className="h-5 w-5 text-blue-500" />
                     <div>
                       <p className="font-medium">Optimal Timing</p>
                       <p className="text-sm text-muted-foreground">
-                        Your break timing aligns well with recommended patterns for your role.
+                        Your break timing aligns well with recommended patterns
+                        for your role.
                       </p>
                     </div>
                   </div>

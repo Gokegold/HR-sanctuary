@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { 
-  Command, 
-  Activity, 
-  Home, 
-  Bell, 
-  Settings, 
+import {
+  Command,
+  Activity,
+  Home,
+  Bell,
+  Settings,
   LogOut,
   Users,
   Shield,
@@ -36,15 +36,27 @@ import {
   XCircle,
   Pause,
   Play,
-  RefreshCw
+  RefreshCw,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
@@ -57,7 +69,7 @@ interface Employee {
   name: string;
   department: string;
   role: string;
-  status: 'active' | 'break' | 'offline' | 'emergency';
+  status: "active" | "break" | "offline" | "emergency";
   location: string;
   lastActivity: Date;
   todayHours: number;
@@ -79,14 +91,14 @@ interface Department {
 
 interface Alert {
   id: string;
-  type: 'emergency' | 'compliance' | 'device' | 'health' | 'security';
-  priority: 'low' | 'medium' | 'high' | 'critical';
+  type: "emergency" | "compliance" | "device" | "health" | "security";
+  priority: "low" | "medium" | "high" | "critical";
   title: string;
   description: string;
   employee: string;
   department: string;
   timestamp: Date;
-  status: 'active' | 'acknowledged' | 'resolved';
+  status: "active" | "acknowledged" | "resolved";
 }
 
 // Mock data
@@ -104,10 +116,10 @@ const mockEmployees: Employee[] = [
     wearableId: "WEAR001",
     healthScore: 85,
     breaks: 2,
-    tasks: { completed: 8, total: 10 }
+    tasks: { completed: 8, total: 10 },
   },
   {
-    id: "2", 
+    id: "2",
     name: "Nurse Jennifer Chen",
     department: "ICU",
     role: "Registered Nurse",
@@ -119,7 +131,7 @@ const mockEmployees: Employee[] = [
     wearableId: "WEAR002",
     healthScore: 78,
     breaks: 3,
-    tasks: { completed: 12, total: 15 }
+    tasks: { completed: 12, total: 15 },
   },
   {
     id: "3",
@@ -134,7 +146,7 @@ const mockEmployees: Employee[] = [
     wearableId: "WEAR003",
     healthScore: 90,
     breaks: 1,
-    tasks: { completed: 5, total: 6 }
+    tasks: { completed: 5, total: 6 },
   },
   {
     id: "4",
@@ -148,8 +160,8 @@ const mockEmployees: Employee[] = [
     complianceScore: 76,
     healthScore: 82,
     breaks: 4,
-    tasks: { completed: 7, total: 12 }
-  }
+    tasks: { completed: 7, total: 12 },
+  },
 ];
 
 const mockDepartments: Department[] = [
@@ -159,7 +171,7 @@ const mockDepartments: Department[] = [
     activeCount: 38,
     complianceScore: 94,
     productivity: 87,
-    manager: "Dr. Sarah Johnson"
+    manager: "Dr. Sarah Johnson",
   },
   {
     name: "ICU",
@@ -167,7 +179,7 @@ const mockDepartments: Department[] = [
     activeCount: 28,
     complianceScore: 91,
     productivity: 92,
-    manager: "Head Nurse Patricia"
+    manager: "Head Nurse Patricia",
   },
   {
     name: "Surgery",
@@ -175,7 +187,7 @@ const mockDepartments: Department[] = [
     activeCount: 25,
     complianceScore: 96,
     productivity: 89,
-    manager: "Dr. Michael Rodriguez"
+    manager: "Dr. Michael Rodriguez",
   },
   {
     name: "Laboratory",
@@ -183,8 +195,8 @@ const mockDepartments: Department[] = [
     activeCount: 14,
     complianceScore: 88,
     productivity: 85,
-    manager: "Lab Supervisor Kim"
-  }
+    manager: "Lab Supervisor Kim",
+  },
 ];
 
 const mockAlerts: Alert[] = [
@@ -197,7 +209,7 @@ const mockAlerts: Alert[] = [
     employee: "Tech Sarah Miller",
     department: "Radiology",
     timestamp: new Date(Date.now() - 15 * 60 * 1000),
-    status: "active"
+    status: "active",
   },
   {
     id: "2",
@@ -208,7 +220,7 @@ const mockAlerts: Alert[] = [
     employee: "Nurse John Davis",
     department: "Pediatrics",
     timestamp: new Date(Date.now() - 25 * 60 * 1000),
-    status: "acknowledged"
+    status: "acknowledged",
   },
   {
     id: "3",
@@ -219,8 +231,8 @@ const mockAlerts: Alert[] = [
     employee: "Dr. Lisa Wang",
     department: "Emergency",
     timestamp: new Date(Date.now() - 35 * 60 * 1000),
-    status: "active"
-  }
+    status: "active",
+  },
 ];
 
 export default function AdminDashboard() {
@@ -244,59 +256,77 @@ export default function AdminDashboard() {
   }, []);
 
   const acknowledgeAlert = (alertId: string) => {
-    setAlerts(prev => 
-      prev.map(alert => 
-        alert.id === alertId 
-          ? { ...alert, status: 'acknowledged' }
-          : alert
-      )
+    setAlerts((prev) =>
+      prev.map((alert) =>
+        alert.id === alertId ? { ...alert, status: "acknowledged" } : alert,
+      ),
     );
   };
 
   const resolveAlert = (alertId: string) => {
-    setAlerts(prev => 
-      prev.map(alert => 
-        alert.id === alertId 
-          ? { ...alert, status: 'resolved' }
-          : alert
-      )
+    setAlerts((prev) =>
+      prev.map((alert) =>
+        alert.id === alertId ? { ...alert, status: "resolved" } : alert,
+      ),
     );
   };
 
   const generateReport = async (type: string) => {
     setIsGeneratingReport(true);
     // Simulate report generation
-    await new Promise(resolve => setTimeout(resolve, 3000));
+    await new Promise((resolve) => setTimeout(resolve, 3000));
     setIsGeneratingReport(false);
-    
+
     // In real app, this would trigger download
     console.log(`${type} report generated`);
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'active': return 'text-green-500';
-      case 'break': return 'text-orange-500';
-      case 'offline': return 'text-red-500';
-      case 'emergency': return 'text-red-600';
-      default: return 'text-gray-500';
+      case "active":
+        return "text-green-500";
+      case "break":
+        return "text-orange-500";
+      case "offline":
+        return "text-red-500";
+      case "emergency":
+        return "text-red-600";
+      default:
+        return "text-gray-500";
     }
   };
 
   const getAlertColor = (priority: string) => {
     switch (priority) {
-      case 'critical': return 'border-red-500 bg-red-500/10';
-      case 'high': return 'border-orange-500 bg-orange-500/10';
-      case 'medium': return 'border-yellow-500 bg-yellow-500/10';
-      case 'low': return 'border-blue-500 bg-blue-500/10';
-      default: return 'border-gray-500 bg-gray-500/10';
+      case "critical":
+        return "border-red-500 bg-red-500/10";
+      case "high":
+        return "border-orange-500 bg-orange-500/10";
+      case "medium":
+        return "border-yellow-500 bg-yellow-500/10";
+      case "low":
+        return "border-blue-500 bg-blue-500/10";
+      default:
+        return "border-gray-500 bg-gray-500/10";
     }
   };
 
-  const totalEmployees = departments.reduce((sum, dept) => sum + dept.employees, 0);
-  const activeEmployees = departments.reduce((sum, dept) => sum + dept.activeCount, 0);
-  const avgComplianceScore = Math.round(departments.reduce((sum, dept) => sum + dept.complianceScore, 0) / departments.length);
-  const avgProductivity = Math.round(departments.reduce((sum, dept) => sum + dept.productivity, 0) / departments.length);
+  const totalEmployees = departments.reduce(
+    (sum, dept) => sum + dept.employees,
+    0,
+  );
+  const activeEmployees = departments.reduce(
+    (sum, dept) => sum + dept.activeCount,
+    0,
+  );
+  const avgComplianceScore = Math.round(
+    departments.reduce((sum, dept) => sum + dept.complianceScore, 0) /
+      departments.length,
+  );
+  const avgProductivity = Math.round(
+    departments.reduce((sum, dept) => sum + dept.productivity, 0) /
+      departments.length,
+  );
 
   if (!user) return <div>Loading...</div>;
 
@@ -310,10 +340,12 @@ export default function AdminDashboard() {
               <Link to="/" className="flex items-center gap-2">
                 <Activity className="h-6 w-6 text-primary" />
                 <span className="font-bold">PulseNet</span>
-                <Badge variant="default" className="bg-pulse-orange">Admin Dashboard</Badge>
+                <Badge variant="default" className="bg-pulse-orange">
+                  Admin Dashboard
+                </Badge>
               </Link>
             </div>
-            
+
             <div className="flex items-center gap-4">
               <SessionTimer />
               <Badge variant="outline" className="flex items-center gap-1">
@@ -322,9 +354,12 @@ export default function AdminDashboard() {
               </Badge>
               <Button variant="ghost" size="icon">
                 <Bell className="h-5 w-5" />
-                {alerts.filter(a => a.status === 'active').length > 0 && (
-                  <Badge variant="destructive" className="absolute -top-1 -right-1 h-5 w-5 rounded-full p-0 text-xs">
-                    {alerts.filter(a => a.status === 'active').length}
+                {alerts.filter((a) => a.status === "active").length > 0 && (
+                  <Badge
+                    variant="destructive"
+                    className="absolute -top-1 -right-1 h-5 w-5 rounded-full p-0 text-xs"
+                  >
+                    {alerts.filter((a) => a.status === "active").length}
                   </Badge>
                 )}
               </Button>
@@ -344,7 +379,9 @@ export default function AdminDashboard() {
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-muted-foreground">Total Employees</p>
+                  <p className="text-sm text-muted-foreground">
+                    Total Employees
+                  </p>
                   <p className="text-3xl font-bold">{totalEmployees}</p>
                   <p className="text-sm text-green-500">↗ +3 this week</p>
                 </div>
@@ -357,10 +394,15 @@ export default function AdminDashboard() {
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-muted-foreground">Currently Active</p>
-                  <p className="text-3xl font-bold text-green-400">{activeEmployees}</p>
                   <p className="text-sm text-muted-foreground">
-                    {Math.round((activeEmployees / totalEmployees) * 100)}% online
+                    Currently Active
+                  </p>
+                  <p className="text-3xl font-bold text-green-400">
+                    {activeEmployees}
+                  </p>
+                  <p className="text-sm text-muted-foreground">
+                    {Math.round((activeEmployees / totalEmployees) * 100)}%
+                    online
                   </p>
                 </div>
                 <Activity className="h-10 w-10 text-green-400" />
@@ -372,8 +414,12 @@ export default function AdminDashboard() {
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-muted-foreground">Compliance Score</p>
-                  <p className="text-3xl font-bold text-blue-400">{avgComplianceScore}%</p>
+                  <p className="text-sm text-muted-foreground">
+                    Compliance Score
+                  </p>
+                  <p className="text-3xl font-bold text-blue-400">
+                    {avgComplianceScore}%
+                  </p>
                   <p className="text-sm text-blue-400">↗ +2% this month</p>
                 </div>
                 <Shield className="h-10 w-10 text-blue-400" />
@@ -386,7 +432,9 @@ export default function AdminDashboard() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-muted-foreground">Productivity</p>
-                  <p className="text-3xl font-bold text-orange-400">{avgProductivity}%</p>
+                  <p className="text-3xl font-bold text-orange-400">
+                    {avgProductivity}%
+                  </p>
                   <p className="text-sm text-orange-400">↗ +5% this week</p>
                 </div>
                 <TrendingUp className="h-10 w-10 text-orange-400" />
@@ -415,7 +463,9 @@ export default function AdminDashboard() {
                     <MapPin className="h-5 w-5" />
                     Live Presence Map
                   </CardTitle>
-                  <CardDescription>Real-time employee locations and status</CardDescription>
+                  <CardDescription>
+                    Real-time employee locations and status
+                  </CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="grid grid-cols-3 gap-4">
@@ -425,14 +475,16 @@ export default function AdminDashboard() {
                         <div className="space-y-2">
                           <div className="flex justify-between text-sm">
                             <span>Active:</span>
-                            <span className="text-green-500">{dept.activeCount}</span>
+                            <span className="text-green-500">
+                              {dept.activeCount}
+                            </span>
                           </div>
                           <div className="flex justify-between text-sm">
                             <span>Total:</span>
                             <span>{dept.employees}</span>
                           </div>
-                          <Progress 
-                            value={(dept.activeCount / dept.employees) * 100} 
+                          <Progress
+                            value={(dept.activeCount / dept.employees) * 100}
                             className="h-2"
                           />
                         </div>
@@ -450,33 +502,45 @@ export default function AdminDashboard() {
                     Critical Alerts
                   </CardTitle>
                   <CardDescription>
-                    {alerts.filter(a => a.status === 'active').length} active alerts
+                    {alerts.filter((a) => a.status === "active").length} active
+                    alerts
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-3">
-                    {alerts.filter(a => a.status === 'active').slice(0, 3).map((alert) => (
-                      <div 
-                        key={alert.id}
-                        className={`p-3 border rounded-lg ${getAlertColor(alert.priority)}`}
-                      >
-                        <div className="flex items-start justify-between">
-                          <div className="flex-1">
-                            <h5 className="font-medium text-sm">{alert.title}</h5>
-                            <p className="text-xs text-muted-foreground">{alert.employee}</p>
-                            <p className="text-xs text-muted-foreground">
-                              {alert.timestamp.toLocaleTimeString()}
-                            </p>
+                    {alerts
+                      .filter((a) => a.status === "active")
+                      .slice(0, 3)
+                      .map((alert) => (
+                        <div
+                          key={alert.id}
+                          className={`p-3 border rounded-lg ${getAlertColor(alert.priority)}`}
+                        >
+                          <div className="flex items-start justify-between">
+                            <div className="flex-1">
+                              <h5 className="font-medium text-sm">
+                                {alert.title}
+                              </h5>
+                              <p className="text-xs text-muted-foreground">
+                                {alert.employee}
+                              </p>
+                              <p className="text-xs text-muted-foreground">
+                                {alert.timestamp.toLocaleTimeString()}
+                              </p>
+                            </div>
+                            <Badge
+                              variant={
+                                alert.priority === "critical"
+                                  ? "destructive"
+                                  : "outline"
+                              }
+                              className="text-xs"
+                            >
+                              {alert.priority}
+                            </Badge>
                           </div>
-                          <Badge 
-                            variant={alert.priority === 'critical' ? 'destructive' : 'outline'}
-                            className="text-xs"
-                          >
-                            {alert.priority}
-                          </Badge>
                         </div>
-                      </div>
-                    ))}
+                      ))}
                   </div>
                 </CardContent>
               </Card>
@@ -493,26 +557,43 @@ export default function AdminDashboard() {
               <CardContent>
                 <div className="space-y-4">
                   {departments.map((dept) => (
-                    <div key={dept.name} className="grid grid-cols-5 gap-4 items-center p-4 border rounded-lg">
+                    <div
+                      key={dept.name}
+                      className="grid grid-cols-5 gap-4 items-center p-4 border rounded-lg"
+                    >
                       <div>
                         <h4 className="font-medium">{dept.name}</h4>
-                        <p className="text-sm text-muted-foreground">{dept.manager}</p>
+                        <p className="text-sm text-muted-foreground">
+                          {dept.manager}
+                        </p>
                       </div>
                       <div className="text-center">
                         <p className="text-2xl font-bold">{dept.employees}</p>
-                        <p className="text-xs text-muted-foreground">Employees</p>
+                        <p className="text-xs text-muted-foreground">
+                          Employees
+                        </p>
                       </div>
                       <div className="text-center">
-                        <p className="text-2xl font-bold text-green-500">{dept.activeCount}</p>
+                        <p className="text-2xl font-bold text-green-500">
+                          {dept.activeCount}
+                        </p>
                         <p className="text-xs text-muted-foreground">Active</p>
                       </div>
                       <div className="text-center">
-                        <p className="text-2xl font-bold text-blue-500">{dept.complianceScore}%</p>
-                        <p className="text-xs text-muted-foreground">Compliance</p>
+                        <p className="text-2xl font-bold text-blue-500">
+                          {dept.complianceScore}%
+                        </p>
+                        <p className="text-xs text-muted-foreground">
+                          Compliance
+                        </p>
                       </div>
                       <div className="text-center">
-                        <p className="text-2xl font-bold text-orange-500">{dept.productivity}%</p>
-                        <p className="text-xs text-muted-foreground">Productivity</p>
+                        <p className="text-2xl font-bold text-orange-500">
+                          {dept.productivity}%
+                        </p>
+                        <p className="text-xs text-muted-foreground">
+                          Productivity
+                        </p>
                       </div>
                     </div>
                   ))}
@@ -538,14 +619,19 @@ export default function AdminDashboard() {
                       />
                     </div>
                   </div>
-                  <Select value={selectedDepartment} onValueChange={setSelectedDepartment}>
+                  <Select
+                    value={selectedDepartment}
+                    onValueChange={setSelectedDepartment}
+                  >
                     <SelectTrigger className="w-[200px]">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="All">All Departments</SelectItem>
-                      {departments.map(dept => (
-                        <SelectItem key={dept.name} value={dept.name}>{dept.name}</SelectItem>
+                      {departments.map((dept) => (
+                        <SelectItem key={dept.name} value={dept.name}>
+                          {dept.name}
+                        </SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
@@ -564,41 +650,59 @@ export default function AdminDashboard() {
                   <CardContent className="p-6">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-4">
-                        <div className={`w-4 h-4 rounded-full ${
-                          employee.status === 'active' ? 'bg-green-500' :
-                          employee.status === 'break' ? 'bg-orange-500' :
-                          employee.status === 'offline' ? 'bg-red-500' :
-                          'bg-red-600'
-                        }`}></div>
+                        <div
+                          className={`w-4 h-4 rounded-full ${
+                            employee.status === "active"
+                              ? "bg-green-500"
+                              : employee.status === "break"
+                                ? "bg-orange-500"
+                                : employee.status === "offline"
+                                  ? "bg-red-500"
+                                  : "bg-red-600"
+                          }`}
+                        ></div>
                         <div>
                           <h4 className="font-semibold">{employee.name}</h4>
                           <p className="text-sm text-muted-foreground">
                             {employee.role} • {employee.department}
                           </p>
                           <p className="text-xs text-muted-foreground">
-                            {employee.location} • Last active: {employee.lastActivity.toLocaleTimeString()}
+                            {employee.location} • Last active:{" "}
+                            {employee.lastActivity.toLocaleTimeString()}
                           </p>
                         </div>
                       </div>
 
                       <div className="flex items-center gap-6">
                         <div className="text-center">
-                          <p className="text-sm font-medium">{employee.todayHours}h</p>
+                          <p className="text-sm font-medium">
+                            {employee.todayHours}h
+                          </p>
                           <p className="text-xs text-muted-foreground">Hours</p>
                         </div>
                         <div className="text-center">
-                          <p className="text-sm font-medium text-blue-500">{employee.complianceScore}%</p>
-                          <p className="text-xs text-muted-foreground">Compliance</p>
+                          <p className="text-sm font-medium text-blue-500">
+                            {employee.complianceScore}%
+                          </p>
+                          <p className="text-xs text-muted-foreground">
+                            Compliance
+                          </p>
                         </div>
                         <div className="text-center">
-                          <p className="text-sm font-medium text-green-500">{employee.healthScore}%</p>
-                          <p className="text-xs text-muted-foreground">Health</p>
+                          <p className="text-sm font-medium text-green-500">
+                            {employee.healthScore}%
+                          </p>
+                          <p className="text-xs text-muted-foreground">
+                            Health
+                          </p>
                         </div>
                         <div className="text-center">
-                          <p className="text-sm font-medium">{employee.tasks.completed}/{employee.tasks.total}</p>
+                          <p className="text-sm font-medium">
+                            {employee.tasks.completed}/{employee.tasks.total}
+                          </p>
                           <p className="text-xs text-muted-foreground">Tasks</p>
                         </div>
-                        
+
                         <div className="flex gap-2">
                           <Button variant="outline" size="sm">
                             <Eye className="h-4 w-4" />
@@ -620,40 +724,47 @@ export default function AdminDashboard() {
             <div className="grid lg:grid-cols-3 gap-6">
               <div className="lg:col-span-2 space-y-4">
                 {alerts.map((alert) => (
-                  <Card key={alert.id} className={getAlertColor(alert.priority)}>
+                  <Card
+                    key={alert.id}
+                    className={getAlertColor(alert.priority)}
+                  >
                     <CardContent className="p-6">
                       <div className="flex items-start justify-between">
                         <div className="flex-1">
                           <div className="flex items-center gap-2 mb-2">
                             <h4 className="font-semibold">{alert.title}</h4>
-                            <Badge 
-                              variant={alert.priority === 'critical' ? 'destructive' : 'outline'}
+                            <Badge
+                              variant={
+                                alert.priority === "critical"
+                                  ? "destructive"
+                                  : "outline"
+                              }
                             >
                               {alert.priority}
                             </Badge>
-                            <Badge variant="outline">
-                              {alert.type}
-                            </Badge>
+                            <Badge variant="outline">{alert.type}</Badge>
                           </div>
-                          <p className="text-sm text-muted-foreground mb-2">{alert.description}</p>
+                          <p className="text-sm text-muted-foreground mb-2">
+                            {alert.description}
+                          </p>
                           <div className="flex items-center gap-4 text-xs text-muted-foreground">
                             <span>Employee: {alert.employee}</span>
                             <span>Department: {alert.department}</span>
                             <span>{alert.timestamp.toLocaleString()}</span>
                           </div>
                         </div>
-                        
+
                         <div className="flex gap-2">
-                          {alert.status === 'active' && (
+                          {alert.status === "active" && (
                             <>
-                              <Button 
-                                size="sm" 
+                              <Button
+                                size="sm"
                                 variant="outline"
                                 onClick={() => acknowledgeAlert(alert.id)}
                               >
                                 Acknowledge
                               </Button>
-                              <Button 
+                              <Button
                                 size="sm"
                                 onClick={() => resolveAlert(alert.id)}
                               >
@@ -661,15 +772,15 @@ export default function AdminDashboard() {
                               </Button>
                             </>
                           )}
-                          {alert.status === 'acknowledged' && (
-                            <Button 
+                          {alert.status === "acknowledged" && (
+                            <Button
                               size="sm"
                               onClick={() => resolveAlert(alert.id)}
                             >
                               Resolve
                             </Button>
                           )}
-                          {alert.status === 'resolved' && (
+                          {alert.status === "resolved" && (
                             <Badge variant="default">Resolved</Badge>
                           )}
                         </div>
@@ -688,25 +799,46 @@ export default function AdminDashboard() {
                     <div className="flex justify-between items-center">
                       <span className="text-sm">Critical</span>
                       <Badge variant="destructive">
-                        {alerts.filter(a => a.priority === 'critical' && a.status === 'active').length}
+                        {
+                          alerts.filter(
+                            (a) =>
+                              a.priority === "critical" &&
+                              a.status === "active",
+                          ).length
+                        }
                       </Badge>
                     </div>
                     <div className="flex justify-between items-center">
                       <span className="text-sm">High</span>
                       <Badge variant="outline" className="text-orange-500">
-                        {alerts.filter(a => a.priority === 'high' && a.status === 'active').length}
+                        {
+                          alerts.filter(
+                            (a) =>
+                              a.priority === "high" && a.status === "active",
+                          ).length
+                        }
                       </Badge>
                     </div>
                     <div className="flex justify-between items-center">
                       <span className="text-sm">Medium</span>
                       <Badge variant="outline" className="text-yellow-500">
-                        {alerts.filter(a => a.priority === 'medium' && a.status === 'active').length}
+                        {
+                          alerts.filter(
+                            (a) =>
+                              a.priority === "medium" && a.status === "active",
+                          ).length
+                        }
                       </Badge>
                     </div>
                     <div className="flex justify-between items-center">
                       <span className="text-sm">Low</span>
                       <Badge variant="outline" className="text-blue-500">
-                        {alerts.filter(a => a.priority === 'low' && a.status === 'active').length}
+                        {
+                          alerts.filter(
+                            (a) =>
+                              a.priority === "low" && a.status === "active",
+                          ).length
+                        }
                       </Badge>
                     </div>
                   </div>
@@ -721,23 +853,25 @@ export default function AdminDashboard() {
               <Card>
                 <CardHeader>
                   <CardTitle className="text-lg">Daily Reports</CardTitle>
-                  <CardDescription>Employee activity and compliance</CardDescription>
+                  <CardDescription>
+                    Employee activity and compliance
+                  </CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-3">
-                    <Button 
-                      className="w-full" 
+                    <Button
+                      className="w-full"
                       variant="outline"
-                      onClick={() => generateReport('daily-activity')}
+                      onClick={() => generateReport("daily-activity")}
                       disabled={isGeneratingReport}
                     >
                       <Download className="h-4 w-4 mr-2" />
                       Daily Activity
                     </Button>
-                    <Button 
-                      className="w-full" 
+                    <Button
+                      className="w-full"
                       variant="outline"
-                      onClick={() => generateReport('daily-compliance')}
+                      onClick={() => generateReport("daily-compliance")}
                       disabled={isGeneratingReport}
                     >
                       <Download className="h-4 w-4 mr-2" />
@@ -754,19 +888,19 @@ export default function AdminDashboard() {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-3">
-                    <Button 
-                      className="w-full" 
+                    <Button
+                      className="w-full"
                       variant="outline"
-                      onClick={() => generateReport('weekly-productivity')}
+                      onClick={() => generateReport("weekly-productivity")}
                       disabled={isGeneratingReport}
                     >
                       <Download className="h-4 w-4 mr-2" />
                       Productivity Trends
                     </Button>
-                    <Button 
-                      className="w-full" 
+                    <Button
+                      className="w-full"
                       variant="outline"
-                      onClick={() => generateReport('weekly-health')}
+                      onClick={() => generateReport("weekly-health")}
                       disabled={isGeneratingReport}
                     >
                       <Download className="h-4 w-4 mr-2" />
@@ -783,19 +917,19 @@ export default function AdminDashboard() {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-3">
-                    <Button 
-                      className="w-full" 
+                    <Button
+                      className="w-full"
                       variant="outline"
-                      onClick={() => generateReport('monthly-executive')}
+                      onClick={() => generateReport("monthly-executive")}
                       disabled={isGeneratingReport}
                     >
                       <Download className="h-4 w-4 mr-2" />
                       Executive Summary
                     </Button>
-                    <Button 
-                      className="w-full" 
+                    <Button
+                      className="w-full"
                       variant="outline"
-                      onClick={() => generateReport('monthly-financial')}
+                      onClick={() => generateReport("monthly-financial")}
                       disabled={isGeneratingReport}
                     >
                       <Download className="h-4 w-4 mr-2" />
@@ -812,19 +946,19 @@ export default function AdminDashboard() {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-3">
-                    <Button 
-                      className="w-full" 
+                    <Button
+                      className="w-full"
                       variant="outline"
-                      onClick={() => generateReport('custom-anomalies')}
+                      onClick={() => generateReport("custom-anomalies")}
                       disabled={isGeneratingReport}
                     >
                       <Download className="h-4 w-4 mr-2" />
                       Anomaly Report
                     </Button>
-                    <Button 
-                      className="w-full" 
+                    <Button
+                      className="w-full"
                       variant="outline"
-                      onClick={() => generateReport('custom-department')}
+                      onClick={() => generateReport("custom-department")}
                       disabled={isGeneratingReport}
                     >
                       <Download className="h-4 w-4 mr-2" />
@@ -839,7 +973,8 @@ export default function AdminDashboard() {
               <Alert>
                 <RefreshCw className="h-4 w-4 animate-spin" />
                 <AlertDescription>
-                  Generating report... This may take a few moments for large datasets.
+                  Generating report... This may take a few moments for large
+                  datasets.
                 </AlertDescription>
               </Alert>
             )}
@@ -872,7 +1007,9 @@ export default function AdminDashboard() {
               <Card>
                 <CardHeader>
                   <CardTitle>Emergency Controls</CardTitle>
-                  <CardDescription>Emergency response management</CardDescription>
+                  <CardDescription>
+                    Emergency response management
+                  </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-3">
                   <Button className="w-full" variant="destructive">

@@ -57,6 +57,23 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        // PulseNet Brand Colors
+        pulse: {
+          blue: "hsl(var(--pulse-blue))",
+          "blue-dark": "hsl(var(--pulse-blue-dark))",
+          green: "hsl(var(--pulse-green))",
+          orange: "hsl(var(--pulse-orange))",
+          red: "hsl(var(--pulse-red))",
+          purple: "hsl(var(--pulse-purple))",
+          yellow: "hsl(var(--pulse-yellow))",
+        },
+        // Status Colors
+        status: {
+          active: "hsl(var(--status-active))",
+          break: "hsl(var(--status-break))",
+          inactive: "hsl(var(--status-inactive))",
+          offline: "hsl(var(--status-offline))",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",

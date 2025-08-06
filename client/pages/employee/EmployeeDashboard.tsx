@@ -146,12 +146,33 @@ export default function EmployeeDashboard() {
                   {currentStatus}
                 </span>
               </div>
-              <Button variant="ghost" size="icon">
+              <Button variant="ghost" size="icon" className="relative">
                 <Bell className="h-5 w-5" />
+                <Badge variant="destructive" className="absolute -top-1 -right-1 h-4 w-4 rounded-full p-0 text-xs">
+                  3
+                </Badge>
               </Button>
-              <Button variant="ghost" onClick={logout}>
+
+              {/* User Profile in Header */}
+              <div className="flex items-center gap-2">
+                <Avatar className="h-8 w-8">
+                  <AvatarImage
+                    src={user.avatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${user.name}`}
+                    alt={`${user.name}'s profile picture`}
+                  />
+                  <AvatarFallback className="bg-primary/10 text-primary text-xs">
+                    {user.name
+                      .split(" ")
+                      .map((n) => n[0])
+                      .join("")}
+                  </AvatarFallback>
+                </Avatar>
+                <span className="text-sm font-medium hidden md:block">{user.name.split(' ')[0]}</span>
+              </div>
+
+              <Button variant="outline" onClick={logout} className="bg-red-500/10 hover:bg-red-500/20 border-red-500/20">
                 <LogOut className="h-4 w-4 mr-2" />
-                Logout
+                Sign Out
               </Button>
             </div>
           </div>

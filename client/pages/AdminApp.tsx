@@ -86,7 +86,7 @@ export default function AdminApp() {
 
           <div className="space-y-4">
             <p className="text-muted-foreground">
-              Continue with more prompts to help us build out this powerful administrative interface.
+              Loading...
             </p>
             <Link to="/">
               <Button variant="outline">

@@ -148,7 +148,10 @@ export default function EmployeeDashboard() {
               </div>
               <Button variant="ghost" size="icon" className="relative">
                 <Bell className="h-5 w-5" />
-                <Badge variant="destructive" className="absolute -top-1 -right-1 h-4 w-4 rounded-full p-0 text-xs">
+                <Badge
+                  variant="destructive"
+                  className="absolute -top-1 -right-1 h-4 w-4 rounded-full p-0 text-xs"
+                >
                   3
                 </Badge>
               </Button>
@@ -157,7 +160,10 @@ export default function EmployeeDashboard() {
               <div className="flex items-center gap-2">
                 <Avatar className="h-8 w-8">
                   <AvatarImage
-                    src={user.avatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${user.name}`}
+                    src={
+                      user.avatar ||
+                      `https://api.dicebear.com/7.x/avataaars/svg?seed=${user.name}`
+                    }
                     alt={`${user.name}'s profile picture`}
                   />
                   <AvatarFallback className="bg-primary/10 text-primary text-xs">
@@ -167,10 +173,16 @@ export default function EmployeeDashboard() {
                       .join("")}
                   </AvatarFallback>
                 </Avatar>
-                <span className="text-sm font-medium hidden md:block">{user.name.split(' ')[0]}</span>
+                <span className="text-sm font-medium hidden md:block">
+                  {user.name.split(" ")[0]}
+                </span>
               </div>
 
-              <Button variant="outline" onClick={logout} className="bg-red-500/10 hover:bg-red-500/20 border-red-500/20">
+              <Button
+                variant="outline"
+                onClick={logout}
+                className="bg-red-500/10 hover:bg-red-500/20 border-red-500/20"
+              >
                 <LogOut className="h-4 w-4 mr-2" />
                 Sign Out
               </Button>
@@ -188,7 +200,10 @@ export default function EmployeeDashboard() {
               <div className="flex items-center gap-3 mb-3">
                 <Avatar className="h-12 w-12 border-2 border-primary/20">
                   <AvatarImage
-                    src={user.avatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${user.name}`}
+                    src={
+                      user.avatar ||
+                      `https://api.dicebear.com/7.x/avataaars/svg?seed=${user.name}`
+                    }
                     alt={`${user.name}'s profile picture`}
                   />
                   <AvatarFallback className="bg-primary/10 text-primary font-semibold">

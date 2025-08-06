@@ -103,9 +103,11 @@ export default function Index() {
       {/* Apps Section */}
       <section className="container mx-auto px-4 py-16">
         <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold mb-4">Four Interconnected Applications</h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
-            Each app is designed for specific roles while maintaining seamless data flow and intelligence sharing across the ecosystem.
+          <h2 className="text-3xl font-bold mb-4">
+            <p>THE HR SANCTUARY</p>
+          </h2>
+          <p className="text-muted-foreground max-w-2xl mx-auto" style={{ letterSpacing: '12px' }}>
+            <h1>THE HOME OF SEAMLESS PRODUCTIVITY.</h1>
           </p>
         </div>
         

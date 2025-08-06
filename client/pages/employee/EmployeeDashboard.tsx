@@ -163,25 +163,41 @@ export default function EmployeeDashboard() {
         <aside className="w-64 border-r bg-card min-h-screen">
           <div className="p-4">
             {/* User Profile */}
-            <div className="flex items-center gap-3 mb-6 p-3 bg-muted/50 rounded-lg">
-              <Avatar className="h-10 w-10">
-                <AvatarImage src={user.avatar} />
-                <AvatarFallback>
-                  {user.name
-                    .split(" ")
-                    .map((n) => n[0])
-                    .join("")}
-                </AvatarFallback>
-              </Avatar>
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium truncate">{user.name}</p>
-                <p className="text-xs text-muted-foreground truncate">
-                  {user.department}
-                </p>
-                <Badge variant="outline" className="text-xs mt-1">
-                  ID: {user.employeeId}
-                </Badge>
+            <div className="mb-6 p-4 bg-muted/50 rounded-lg">
+              <div className="flex items-center gap-3 mb-3">
+                <Avatar className="h-12 w-12 border-2 border-primary/20">
+                  <AvatarImage
+                    src={user.avatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${user.name}`}
+                    alt={`${user.name}'s profile picture`}
+                  />
+                  <AvatarFallback className="bg-primary/10 text-primary font-semibold">
+                    {user.name
+                      .split(" ")
+                      .map((n) => n[0])
+                      .join("")}
+                  </AvatarFallback>
+                </Avatar>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium truncate">{user.name}</p>
+                  <p className="text-xs text-muted-foreground truncate">
+                    {user.department}
+                  </p>
+                  <Badge variant="outline" className="text-xs mt-1">
+                    ID: {user.employeeId}
+                  </Badge>
+                </div>
               </div>
+
+              {/* Sign Out Button */}
+              <Button
+                onClick={logout}
+                variant="outline"
+                size="sm"
+                className="w-full"
+              >
+                <LogOut className="h-4 w-4 mr-2" />
+                Sign Out
+              </Button>
             </div>
 
             {/* Navigation Menu */}

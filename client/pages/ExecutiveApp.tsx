@@ -86,7 +86,7 @@ export default function ExecutiveApp() {
 
           <div className="space-y-4">
             <p className="text-muted-foreground">
-              Continue with more prompts to help us build out this sophisticated executive intelligence platform.
+              LOading...
             </p>
             <Link to="/">
               <Button variant="outline">
